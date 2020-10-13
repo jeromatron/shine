@@ -15,9 +15,9 @@ blocks:
     statements:
       - insert: |
          curl -X POST \
-         --url <<base-uri:https://base-uri>>/api/rest/v2/namespaces/<<namespace:test>>/collections/shine \
+         --url <<baseuri:https://baseuri>>/api/rest/v2/namespaces/<<namespace:shine>>/collections/shine \
          -H  "Accept: application/json" \
          -H  "X-Cassandra-Request-Id: {request_id}" \
-         -H  "X-Cassandra-Token: <<auth-token:my-auth-token>>" \
+         -H  "X-Cassandra-Token: <<authtoken:my-auth-token>>" \
          -H  "Content-Type: application/json" \
          -d '{"farm_id":"{farm_id}","device":{"panel_id":"{panel_id}"},"measurements":{"voltage":{voltage},"current": {current},"power":{power},"temperature":{temperature}},"time":"{time}"}'
