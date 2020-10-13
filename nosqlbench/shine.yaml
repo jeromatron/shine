@@ -15,9 +15,9 @@ blocks:
     statements:
       - insert: |
          curl -X POST \
-         --url https://the-db-id-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/thname/collections/thecollection \
+         --url <<base-uri:https://base-uri>>/api/rest/v2/namespaces/<<namespace:test>>/collections/shine \
          -H  "Accept: application/json" \
          -H  "X-Cassandra-Request-Id: {request_id}" \
-         -H  "X-Cassandra-Token: <<auth_token:my-auth-token>>" \
+         -H  "X-Cassandra-Token: <<auth-token:my-auth-token>>" \
          -H  "Content-Type: application/json" \
          -d '{"farm_id":"{farm_id}","device":{"panel_id":"{panel_id}"},"measurements":{"voltage":{voltage},"current": {current},"power":{power},"temperature":{temperature}},"time":"{time}"}'
