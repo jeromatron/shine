@@ -1,0 +1,23 @@
+bindings:
+  request_id: ToHashedUUID(); ToString();
+  farm_id: Div(<<panels:1000>>);Mod(<<farms:5>>); ToHashedUUID() -> java.util.UUID
+  panel_id: Mod(<<panels:1000>>); ToHashedUUID() -> java.util.UUID
+  voltage: Normal(20.0d,2.0d); -> ToDouble()
+  current: Normal(4.0d,1.0d); -> ToDouble()
+  power: Normal(10.0d,1.0d); -> ToDouble()
+  temperature: Normal(20.0d,2.0d); -> ToDouble()
+  time: StartingEpochMillis('2019-06-24 23:59:59'); AddHashRange(0L,31536000000L); ToDate()
+
+blocks:
+  - name: populate
+    tags:
+      phase: populate
+    statements:
+      - insert: |
+         curl -X POST \
+         --url https://the-db-id-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/thname/collections/thecollection \
+         -H  "Accept: application/json" \
+         -H  "X-Cassandra-Request-Id: {request_id}" \
+         -H  "X-Cassandra-Token: <<auth_token:my-auth-token>>" \
+         -H  "Content-Type: application/json" \
+         -d '{"farm_id":"{farm_id}","device":{"panel_id":"{panel_id}"},"measurements":{"voltage":{voltage},"current": {current},"power":{power},"temperature":{temperature}},"time":"{time}"}'
