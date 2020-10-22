@@ -1,7 +1,10 @@
-java -jar $NOSQLBENCH_BIN/nb.jar run \
-	cycles="$NUM_CYCLES" \
+nb shine http \
+	cycles="10" \
 	baseuri="$BASE_URI" \
 	authtoken="$AUTH_TOKEN" \
-	driver=stdout \
-	yaml=./shine.yaml \
-	> generated-curl-statements.sh
+    $*
+
+exit $?
+
+	cycles="$NUM_CYCLES" \
+

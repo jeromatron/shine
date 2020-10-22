@@ -1,3 +1,8 @@
+scenarios:
+ http:
+  populate: run driver=http tags=phase:populate-http cycles=10
+  populate-diag: run driver=http tags=phase:populate-http cycles=10 diag=all
+
 bindings:
   request_id: ToHashedUUID(); ToString();
   farm_id: Div(<<panels:500>>);Mod(<<farms:2>>); ToHashedUUID() -> java.util.UUID
@@ -9,6 +14,29 @@ bindings:
   time: Mul(360); StartingEpochMillis('2020-10-12 23:59:59'); ToDate();
 
 blocks:
+  - name: populate-http
+    tags:
+      phase: populate-http
+    statements:
+      - insert: "POST <<baseuri:https://baseuri>>/api/rest/v2/namespaces/<<namespace:shine>>/collections/shine"
+        Accept: "application/json"
+        X-Cassandra-Request-Id: "{request_id}"
+        X-Cassandra-Token: "<<authtoken:my-auth-token>>"
+        Content-Type: "application/json"
+        body: |
+          {
+            "farm_id":"{farm_id}",
+            "device": {
+              "panel_id":"{panel_id}"
+            },
+            "measurements":{
+              "voltage":{voltage},
+              "current": {current},
+              "power":{power},
+              "temperature":{temperature}
+            },
+            "time":"{time}"
+          }
   - name: populate
     tags:
       phase: populate
